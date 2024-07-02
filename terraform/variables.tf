@@ -10,4 +10,4 @@ variable "clusterName" {
   default     = "vprofile-eks"
 }
 
-#3
+#3W
