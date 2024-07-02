@@ -63,10 +63,18 @@ jobs:
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
-      - name: Terraform Apply
-        id: apple
+      - name: Terraform Destroy Plan
+        run: terraform plan -destroy -out=destroy-plan.tfplan
+
+      - name: Terraform Apply Destroy Plan
+        id: apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform destroy -auto-approve -input=false -parallelism=1 planfile
+        run: terraform apply -auto-approve destroy-plan.tfplan
+
+      # - name: Terraform Apply
+      #   id: apple
+      #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      #   run: terraform apply -auto-approve -input=false -parallelism=1 planfile
       
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
